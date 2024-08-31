@@ -16,8 +16,9 @@ game {
 }
 
 #score, #strikes {
-    font-family: sans;
-    color: #eeeeee;
+    font-family: mono;
+    color: #EEEDE2;
+    text-shadow: 0 4px 8px #0008;
     width: 100%;
     margin: 1rem 0;
     text-align: center;
@@ -25,9 +26,9 @@ game {
 }
 
 #tutorial {
-    font-family: sans;
-    color: #eeeeee;
-    width: 500px;
+    font-family: mono;
+    color: #EEEDE2;
+    width: 600px;
     font-size: 24px;
     position: absolute;
     text-align: center;
@@ -35,6 +36,36 @@ game {
     transition: opacity 0.1s;
 }
 
-#tutorial.show {
+#tutorial.show, #restart.show {
     opacity: 100%;
+}
+
+#restart {
+    position: absolute;
+    background-color: #DDDBC4;
+    padding: 2rem;
+    opacity: 0%;
+}
+
+#restart p {
+    font-family: mono;
+    margin: 0;
+    font-size: 32px;
+    margin-bottom: 2rem;
+}
+
+#restart button {
+    font-family: mono;
+    font-size: 24px;
+    color: #5E4F89;
+    border: 1px solid #5E4F89;
+    background-color: transparent;
+    padding: .25rem .5rem;
+    cursor: pointer;
+    transition: all .1s;
+}
+
+#restart button:hover {
+    background-color: #5E4F89;
+    color: #DDDBC4;
 }

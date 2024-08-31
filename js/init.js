@@ -3,7 +3,9 @@ let facemesh;
 let canvas, ctx;
 let xOffset = 0, yOffset = 0;
 let xMod = 1, yMod = 1;
-let fruitImages = {};
+let paused = false;
+let highScore = 0;
+const fruitImages = {};
 
 let xPos = x => x * xMod + xOffset;
 let yPos = y => y * yMod + yOffset;
@@ -28,12 +30,13 @@ navigator.getUserMedia = (navigator.getUserMedia ||
 	navigator.msGetUserMedia);
 
 function initFruitImages() {
-	let appleImage = new Image();
+	const appleImage = new Image();
 	appleImage.src = "assets/apple.png";
 	fruitImages['apple'] = appleImage;
 }
 
 function initApplication() {
+	document.getElementById("restart-button").addEventListener("click", (_) => reset());
 	canvas = document.createElement('canvas');
 	document.querySelector("game").appendChild(canvas);
 	ctx = canvas.getContext('2d', { alpha: false });
@@ -51,7 +54,7 @@ function initApplication() {
 		stream => {
 			initialized = true;
 			video.srcObject = stream;
-			let stream_settings = stream.getVideoTracks()[0].getSettings();
+			const stream_settings = stream.getVideoTracks()[0].getSettings();
 			cameraRes = [stream_settings.width, stream_settings.height];
 			console.log(cameraRes)
 		},
@@ -63,11 +66,31 @@ function initApplication() {
 	facemesh = ml5.facemesh(video, { maxFaces: 1 }, modelLoaded);
 	requestAnimationFrame((ms) => { 
 		last_ms = ms;
-		loop();
+		loop(ms);
 	});
 }
 
+function reset() {
+	console.log("resetting!")
+	score = 0;
+	strikes = 0;
+
+	fruits = [];
+	fruitsSpawned = 0;
+	paused = false;
+
+	document.getElementById("restart").classList.remove("show");
+	drawScore();
+	drawStrikes();
+	requestAnimationFrame((ms) => { 
+		last_ms = ms;
+		loop(ms);
+	});
+	spawnFruit();
+}
+
 function loop(ms) {
+	if (paused) return;
 	if ("faceInViewConfidence" in face) update();
 	delta = ms - last_ms;
 	if (delta > 100) delta = 16;

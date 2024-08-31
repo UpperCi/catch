@@ -1,9 +1,10 @@
 const SPAWN_START = 200;
 const SPAWN_RANGE = 320;
-const GRAVITY = 0.0005;
+const GRAVITY = 0.0003;
 const BASE_SPAWN_TIME = 2000;
 
 let score = 0;
+let strikes = 0;
 
 let fruits = [];
 let fruitsSpawned = 0;
@@ -22,6 +23,15 @@ function spawnFruit() {
 	});
 }
 
+function drawStrikes() {
+	const strikeText = "X".repeat(strikes).padEnd(3, 'O');
+	document.getElementById("strikes").innerText = `Strikes: ${strikeText}`;
+}
+
+function drawScore() {
+	document.getElementById("score").innerText = `Score: ${score}`;
+}
+
 function updateFruit() {
 	let mouthX = xPos(face.scaledMesh[13][0]);
 	let moveFruit = true;
@@ -34,13 +44,23 @@ function updateFruit() {
 					}
 					fruits.splice(fruits.indexOf(f), 1);
 					score++;
-					document.getElementById("score").innerText = `Score: ${score}`;
+					drawScore();
 					continue;
+				} else if (fruitsSpawned == 1) {
+					moveFruit = false;
 				}
 			} else if (fruitsSpawned == 1 && f.y > 550) {
 				moveFruit = false;
 				document.getElementById("tutorial").classList.add("show");
 			} else if (f.y > 700) {
+				strikes++;
+				drawStrikes();
+				if (strikes >= 3) {
+					document.getElementById("restart").classList.add("show");
+					if (score > highScore) highScore = score;
+					document.getElementById("high-score").innerText = `High Score: ${highScore}`;
+					paused = true;
+				}
 				fruits.splice(fruits.indexOf(f), 1);
 				continue;
 			}
@@ -49,7 +69,9 @@ function updateFruit() {
 		if (moveFruit) {
 			f.x += f.dx * delta;
 			f.y += f.dy * delta;
-			f.dy += GRAVITY * delta;
+
+			const acceleration = GRAVITY * (1 + (0.3 * fruitsSpawned));
+			f.dy += acceleration * delta;
 		}
 
 		ctx.drawImage(fruitImages[f.img], f.x - 39, f.y);
@@ -58,7 +80,8 @@ function updateFruit() {
 	if (moveFruit) {
 		spawnTimer -= delta;
 		if (spawnTimer <= 0) {
-			spawnTimer = BASE_SPAWN_TIME;
+			const nextSpawnTime = BASE_SPAWN_TIME * (1 / (1 + (0.1 * fruitsSpawned)));
+			spawnTimer = nextSpawnTime;
 			spawnFruit();
 		}
 	}
