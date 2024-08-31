@@ -40,6 +40,10 @@ function initApplication() {
 	canvas.width = 720;
 	canvas.height = 720;
 
+	ctx.fillStyle = "#413926";
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+
 	calcPolys();
 
 	navigator.getUserMedia(

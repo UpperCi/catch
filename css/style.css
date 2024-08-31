@@ -1,5 +1,5 @@
 body {
-    background-color: #22222f;
+    background-color: #827249;
 }
 
 video {
@@ -15,10 +15,26 @@ game {
     flex-wrap: wrap;
 }
 
-#score {
+#score, #strikes {
+    font-family: sans;
     color: #eeeeee;
     width: 100%;
-    margin: 0;
+    margin: 1rem 0;
     text-align: center;
     font-size: 32px;
+}
+
+#tutorial {
+    font-family: sans;
+    color: #eeeeee;
+    width: 500px;
+    font-size: 24px;
+    position: absolute;
+    text-align: center;
+    opacity: 0%;
+    transition: opacity 0.1s;
+}
+
+#tutorial.show {
+    opacity: 100%;
 }

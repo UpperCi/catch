@@ -30,7 +30,6 @@ function updateBounds() {
 	let fieldMod = 720 / fieldSize; // bigger when bigger bounding box
 	let middle = (baseTopLeft[0] + baseBottomRight[0]); // does not scale with bounding box
 	xOffset = -(middle - (720 + fieldSize) * 0.4) * (fieldMod - 1) + 720;
-	// ctx.fillRect(topLeft[0], topLeft[1], size[0], size[1]);
 }
 
 function updateLips() {
@@ -56,7 +55,7 @@ function updateLips() {
 }
 
 function update() {
-	ctx.fillStyle = "#000000";
+	ctx.fillStyle = "#413926";
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	updateBounds();
